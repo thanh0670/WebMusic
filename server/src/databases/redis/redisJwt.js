@@ -15,11 +15,11 @@ const connectRedis = async () => {
 
 
 const pushTokenToBlackList = async (key, token, expireTime) => {
-    await client.instanceClient.LPUSH(key, token);
-    await client.instanceClient.expire(key, expireTime);
+    await client.LPUSH(key, token);
+    await client.expire(key, expireTime);
 }
 const isHaveTokenInBlackList = async (key, token) => {
-    const list = await client.instanceClient.LRANGE(key, 0, -1);
+    const list = await client.LRANGE(key, 0, -1);
     const isHave = list.includes(token)
     return isHave;
 }

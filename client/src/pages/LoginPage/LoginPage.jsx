@@ -9,7 +9,7 @@ import { UserContext } from '../../contexts/UserContext';
 const LoginPage = () => {
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
-    const { setUsername } = useContext(UserContext);
+    const { setUsername, setEmailContext } = useContext(UserContext);
     const navigate = useNavigate();
 
     const getEmail = (e) => {
@@ -32,8 +32,10 @@ const LoginPage = () => {
                 if (response.data.success) {
                     localStorage.setItem('MUSIC_ACCESSTOKEN', response.data.accessToken);
                     localStorage.setItem('MUSIC_USERNAME', response.data.username);
+                    localStorage.setItem('MUSIC_EMAIL', email);
                     navigate("/");
                     setUsername(response.data.username);
+                    setEmailContext(email);
                     console.log();
 
                 } else {
@@ -59,8 +61,8 @@ const LoginPage = () => {
                 </svg>
                 <p className='flex flex-col justify-center items-center text-[48px] font-leckerli text-[#4CAF50] mt-[-15px]'>Login in to Soundify!</p>
                 <div className='w-[100%] flex flex-col gap-[20px] justify-center items-center'>
-                    <Input placeholder="Enter your Email" onGetdData={getEmail} />
-                    <Input placeholder="Enter your Password" onGetdData={getPassword} />
+                    <Input placeholder="Enter your Email" onGetdData={getEmail} type="email" />
+                    <Input placeholder="Enter your Password" onGetdData={getPassword} type="password" />
                 </div>
                 <div className='flex flex-col justify-center items-center gap-[8px]'>
                     <button className=' w-[360px] h-[50px] flex justify-center items-center text-[24px] bg-[#00DB0B] rounded-tl-3xl rounded-bl-3xl rounded-tr-3xl rounded-br-3xl'

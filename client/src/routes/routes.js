@@ -12,7 +12,7 @@ export default function MainRoute() {
             <Routes>
                 <Route path="/" element={<Layout />}>
                     <Route index element={<HomePage />} />
-                    <Route path="Contactpage" element={<Contactpage />} />
+                    {/* <Route path="Contactpage" element={<Contactpage />} /> */}
                 </Route>
                 <Route path="LoginPage" element={<LoginPage />} />
                 <Route path="RegisterPage" element={<RegisterPage />} />

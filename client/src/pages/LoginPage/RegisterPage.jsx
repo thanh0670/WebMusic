@@ -32,14 +32,13 @@ const RegisterPage = () => {
                     username: username(email),
                     email,
                     password
-                }, { withCredentials: true }).then(() => {
-                    if (response.data.success) {
-                        navigate("/")
-                    } else {
-                        alert("ERROR")
-                    }
-                    console.log(response);
-                })
+                }, { withCredentials: true })
+                if (response.data.success) {
+                    navigate("/")
+                } else {
+                    alert("ERROR")
+                }
+                console.log(response);
 
             } catch (error) {
                 if (error.response) {
@@ -60,9 +59,9 @@ const RegisterPage = () => {
                 </svg>
                 <p className='flex flex-col justify-center items-center text-[48px] font-leckerli text-[#4CAF50] mt-[-15px]'>Sign up to start <span>listening</span></p>
                 <div className='w-[100%] flex flex-col gap-[20px] justify-center items-center'>
-                    <Input placeholder="Enter your Email" onGetdData={getEmail} />
-                    <Input placeholder="Enter your Password" onGetdData={getPassword} />
-                    <Input placeholder="Confirm Password" onGetdData={getConfirm} />
+                    <Input placeholder="Enter your Email" onGetdData={getEmail} type="email" />
+                    <Input placeholder="Enter your Password" onGetdData={getPassword} type="password" />
+                    <Input placeholder="Confirm Password" onGetdData={getConfirm} type="password" />
                 </div>
                 <div className='flex flex-col justify-center items-center gap-[8px]'>
                     <button className=' w-[360px] h-[50px] flex justify-center items-center text-[24px] bg-[#00DB0B] rounded-tl-3xl rounded-bl-3xl rounded-tr-3xl rounded-br-3xl'

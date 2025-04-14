@@ -160,6 +160,7 @@ const logout = asyncHandler(async (req, res) => {
   const cookie = req.cookies.refreshToken;
 
   try {
+
     if (!cookie) {
       return res.status(400).json({
         message: "Không có refreshToken trong cookie!",
@@ -167,9 +168,14 @@ const logout = asyncHandler(async (req, res) => {
     }
     // push refresh token to blacklist redis
 
-    await pushTokenToBlackList(email, token, 900);
-    await RefreshModel.findOneAndDelete({ token: cookie });
+    try {
+      await pushTokenToBlackList(email, token, 900);
+      await RefreshModel.findOneAndDelete({ token: cookie });
 
+    } catch (error) {
+      console.log(error);
+
+    }
     // clear cookie from client
     res.clearCookie('refreshToken', {
       httpOnly: true,
@@ -182,7 +188,7 @@ const logout = asyncHandler(async (req, res) => {
 
     if (req.cookies.refreshToken) {
       res.status(200).json({
-        message: "logout successfull"
+        message: "logout successfull", success: true
       });
     } else {
       res.status(400).json({

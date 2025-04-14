@@ -4,17 +4,20 @@ export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
     const [username, setUsername] = useState("");
+    const [email, setEmailContext] = useState("");
 
     useEffect(() => {
         const storedUser = localStorage.getItem("MUSIC_USERNAME");
-        if (storedUser) {
+        const storedEmail = localStorage.getItem("MUSIC_EMAIL");
+
+        if (storedUser && storedEmail) {
             setUsername(storedUser);
-            console.log(storedUser);
+            setEmailContext(storedEmail);
         }
     }, []);
 
     return (
-        <UserContext.Provider value={{ username, setUsername }}>
+        <UserContext.Provider value={{ username, setUsername, email, setEmailContext }}>
             {children}
         </UserContext.Provider>
     );

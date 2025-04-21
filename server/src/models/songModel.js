@@ -1,9 +1,30 @@
 const mongoose = require("mongoose");
 
-const SongSchema = new mongoose.Schema({
-    title: String,
-    artist: String,
-    segments: [String], // các URL từ Firebase Storage
+const schema = new mongoose.Schema({
+    title: {
+        type: String,
+        required: [true, "please add the title"]
+    },
+    artist: {
+        type: String,
+        required: [true, "please add the artist"]
+    },
+    lyrics: {
+        type: String,
+        required: [true, "please add the Lyrics"]
+    },
+    url_audio: {
+        type: String,
+        required: [true, "please add the url_audio"]
+    },
+    url_img: {
+        type: String,
+        required: [true, "please add the url_audio"]
+    },
+    releaseDate: {
+        type: String,
+        required: [true, "please add the ReleaseDate"]
+    },
 });
 
-module.exports = mongoose.model('Song', SongSchema);
+module.exports = mongoose.model('Song', schema);

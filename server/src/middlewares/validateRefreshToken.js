@@ -9,6 +9,10 @@ const validateRefreshToken = asyncHandler(async (req, res, next) => {
     let checkRefreshToken = false;
     const ipAddress = req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress;
     let decodedData;
+    console.log(cookie);
+    console.log("hello");
+    
+    
     try {
         decodedData = jwt.verify(cookie, process.env.REFRESH_SECRET_KEY);
     } catch (err) {

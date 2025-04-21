@@ -82,8 +82,7 @@ const login = asyncHandler(async (req, res) => {
         user: {
           username: user.username,
           email: user.email,
-          id: user.id,
-          role: user.role
+          id: user.id
         },
       }, process.env.JWT_SECRET_KEY,
       {
@@ -100,8 +99,7 @@ const login = asyncHandler(async (req, res) => {
         user: {
           username: user.username,
           email: user.email,
-          id: user.id,
-          role: user.role
+          id: user.id
         },
       }, process.env.REFRESH_SECRET_KEY,
       {
@@ -134,7 +132,7 @@ const login = asyncHandler(async (req, res) => {
       // path: "/"
     });
     res.status(200).json({
-      accessToken, username: user.username, success: true
+      accessToken, username: user.username, success: true, role: user.role
     });
   } else {
     res.status(401);
@@ -148,9 +146,13 @@ const login = asyncHandler(async (req, res) => {
 //@desc Current User
 //@route POST /api/users/current
 //@access private
-const current = (req, res) => {
-  res.status(200).json(req.user);
-};
+const current = asyncHandler(async (req, res) => {
+  res.status(200).json({
+    email:req.user.email,
+    role: req.user.role,
+    id:req.user.id});
+}
+)
 
 //@desc Logout User
 //@route POST /api/users/logout

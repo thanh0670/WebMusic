@@ -1,11 +1,8 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { Outlet, Link } from "react-router"
 import { UserContext } from '../../contexts/UserContext';
-
 const Layout = () => {
     const { username } = useContext(UserContext);
-    console.log(username);
-
 
     return (
         <div className=' w-[100vw] h-[100vh] bg-[#121212] flex flex-col'>

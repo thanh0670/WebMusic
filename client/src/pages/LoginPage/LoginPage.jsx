@@ -6,10 +6,14 @@ import { UserContext } from '../../contexts/UserContext';
 
 
 
+
 const LoginPage = () => {
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
     const { setUsername, setEmailContext } = useContext(UserContext);
+  
+
+
     const navigate = useNavigate();
 
     const getEmail = (e) => {

@@ -1,8 +1,11 @@
 import React, { useContext } from 'react';
 import Input from './components/Input';
-import { Link, useNavigate } from 'react-router';
+import { data, Link, useNavigate } from 'react-router';
 import axios from 'axios'
 import { UserContext } from '../../contexts/UserContext';
+import { useDispatch } from "react-redux";
+import { dataAdmin } from '../../redux/features/counter/valueAdminSlice';
+import { current } from '../../redux/features/counter/currentSlice';
 
 
 
@@ -11,7 +14,8 @@ const LoginPage = () => {
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
     const { setUsername, setEmailContext } = useContext(UserContext);
-  
+    const dispatch = useDispatch();
+    
 
 
     const navigate = useNavigate();
@@ -37,7 +41,18 @@ const LoginPage = () => {
                     localStorage.setItem('MUSIC_ACCESSTOKEN', response.data.accessToken);
                     localStorage.setItem('MUSIC_USERNAME', response.data.username);
                     localStorage.setItem('MUSIC_EMAIL', email);
-                    navigate("/");
+                    console.log(response.data);
+                    console.log(response.data.role);
+                    
+                    if(response.data.role ==="user"){
+                        dispatch( current())    
+                        navigate("/");
+                    }
+                    else if(response.data.role ==="admin"){
+                        dispatch( current())    
+                        dispatch(dataAdmin());
+                        navigate("/admin")
+                    }
                     setUsername(response.data.username);
                     setEmailContext(email);
                     console.log();

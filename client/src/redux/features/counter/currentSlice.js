@@ -1,5 +1,6 @@
 import { createSlice,createAsyncThunk} from '@reduxjs/toolkit'
 import axios from "axios";
+
 const initialState = {
     value: 0,
     data:[],
@@ -29,7 +30,7 @@ export const current = createAsyncThunk(
           Authorization: `Bearer ${accessToken}`,
         },
       };
-      const responseData = await axios.get('http://localhost:8000/api/users/current', config);
+      const responseData = await axios.get('http://localhost:8000/api/users/current', config);  
       return responseData.data;
     } catch (error) {
       if (error.response && error.response.status === 401) {
@@ -52,7 +53,7 @@ export const current = createAsyncThunk(
           localStorage.removeItem('MUSIC_USERNAME');
         }
       }
-      return console.log("Vui long dang nhap lai");
+       throw new error("Vui long dang nhap lai");
     }
   },
 )

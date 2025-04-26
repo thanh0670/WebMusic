@@ -17,7 +17,8 @@ const HomePage = () => {
                 localStorage.removeItem("MUSIC_ACCESSTOKEN")
                 localStorage.removeItem("MUSIC_USERNAME")
                 localStorage.removeItem("MUSIC_EMAIL")
-                setUsername("")
+                await setUsername("")
+                window.location.reload();
             }
         } catch (error) {
             if (error.response) {

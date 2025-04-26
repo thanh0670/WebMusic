@@ -10,23 +10,32 @@ import { useNavigate } from "react-router";
 function App() {
   const reduxDispatch = useDispatch();
   const navigate = useNavigate();
-  const status = useSelector((state) => state.counter.status);
-  const data = useSelector((state) => state.counter.response);
+  const status = useSelector((state) => state.current.status);
+  const data = useSelector((state) => state.current.response);
+  const error = useSelector((state) => state.current.error);
+
 
   useEffect(()=>{
     reduxDispatch( current())    
   },[reduxDispatch])
   
+  useEffect(()=>{
+    if(status ==="failed"){
+      navigate("/")
+    }
+  },[])
   
   useEffect(() => {
-    if (status === "successed") {
+    if (data && status === "successed") {
+      console.log(data.role);
+      
       if (data.role === "admin") {
         navigate("/admin");
       } else {
-        navigate("/home");
+        navigate("/");
       }
     }
-  }, [status, data, navigate]);
+  }, [status, data, error, navigate]);
   return (
     <div className="App">
       <UserProvider>

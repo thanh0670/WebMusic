@@ -4,7 +4,7 @@ import valueAdminSlice from './features/counter/valueAdminSlice'
 
 export const store = configureStore({
     reducer: {
-        counter: currentSlice,
+        current: currentSlice,
         admin:valueAdminSlice
     },
 })

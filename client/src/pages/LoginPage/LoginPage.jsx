@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import Input from './components/Input';
-import { data, Link, useNavigate } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import axios from 'axios'
 import { UserContext } from '../../contexts/UserContext';
 import { useDispatch } from "react-redux";
@@ -51,7 +51,7 @@ const LoginPage = () => {
                     else if(response.data.role ==="admin"){
                         dispatch( current())    
                         dispatch(dataAdmin());
-                        navigate("/admin")
+                        navigate("/admin/songs")
                     }
                     setUsername(response.data.username);
                     setEmailContext(email);

@@ -4,7 +4,8 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        leckerli: ['"Leckerli One"', 'cursive'],
+        leckerli: ['"Leckerli One"', 'cursive',],
+        robotoCondensed: ['"Roboto Condensed"', 'sans-serif'],
       },
     },
   },

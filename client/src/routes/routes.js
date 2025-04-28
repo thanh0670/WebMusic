@@ -3,7 +3,10 @@ import Layout from "../components/layout/Layout"
 import HomePage from "../pages/HomePage/HomePage"
 import LoginPage from "../pages/LoginPage/LoginPage"
 import RegisterPage from "../pages/LoginPage/RegisterPage"
-import AdminPage from "../pages/adminPage/adminPage"
+import AdminSongsPage from "../pages/adminPage/adminSongsPage"
+import AdminUploadPage from "../pages/adminPage/adminUploadPage"
+import LayoutAdmin from "../components/layout/LayoutAdmin"
+import AdminManagerPage from "../pages/adminPage/adminManagerPage"
 
 
 export default function MainRoute() {
@@ -14,7 +17,11 @@ export default function MainRoute() {
                 </Route>
                 <Route path="LoginPage" element={<LoginPage />} />
                 <Route path="RegisterPage" element={<RegisterPage />} />
-                <Route path="admin" element={<AdminPage />} />
+                <Route path="/admin" element={< LayoutAdmin/>} >
+                    <Route index element={<AdminSongsPage />} />
+                    <Route path="upload" element={<AdminUploadPage/>}/>
+                    <Route path="manage/:id" element={<AdminManagerPage/>}/>
+                </Route>
             </Routes>
     )
 }

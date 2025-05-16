@@ -51,7 +51,7 @@ const LoginPage = () => {
                     else if(response.data.role ==="admin"){
                         dispatch( current())    
                         dispatch(dataAdmin());
-                        navigate("/admin/songs")
+                        navigate("/admin")
                     }
                     setUsername(response.data.username);
                     setEmailContext(email);

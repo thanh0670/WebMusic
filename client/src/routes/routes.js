@@ -7,7 +7,7 @@ import AdminSongsPage from "../pages/adminPage/adminSongsPage"
 import AdminUploadPage from "../pages/adminPage/adminUploadPage"
 import LayoutAdmin from "../components/layout/LayoutAdmin"
 import AdminManagerPage from "../pages/adminPage/adminManagerPage"
-
+import AlbumPage from "../pages/AlbumDetail/AlbumPage"
 
 export default function MainRoute() {
     return (
@@ -22,6 +22,8 @@ export default function MainRoute() {
                     <Route path="upload" element={<AdminUploadPage/>}/>
                     <Route path="manage/:id" element={<AdminManagerPage/>}/>
                 </Route>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/album/:albumId" element={<AlbumPage />} />
             </Routes>
     )
 }

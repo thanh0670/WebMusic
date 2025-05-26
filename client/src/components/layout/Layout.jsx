@@ -5,8 +5,8 @@ const Layout = () => {
   const { username } = useContext(UserContext);
 
   return (
-    <div className=" w-[100vw] h-[100vh] bg-[#121212] flex flex-col">
-      <div className=" w-[100%] h-[100px] pl-[25px] border border-solid border-orange-50 flex flex-row justify-between items-center">
+    <div className=" w-[100%] h-[100vh] bg-[#121212] flex flex-col">
+      <div className="sticky top-[0px] z-[100] w-[100%] min-h-[100px] pl-[25px] flex flex-row justify-between items-center overflow-hidden bg-[#121212]">
         <div className=" flex flex-row justify-center items-center gap-[30px]">
           <div className=" hover:cursor-pointer">
             <svg
@@ -52,7 +52,7 @@ const Layout = () => {
             <p className=" text-[16px] text-[white] flex justify-center items-center">
               {username}
             </p>
-            <div className=" w-[60px] h-[60px] bg-[red] rounded-[100%^]"></div>
+            <div className=" w-[60px] h-[60px] bg-[red] rounded-[100%]"></div>
           </div>
         ) : (
           <div className="flex flex-row gap-20px">
@@ -70,6 +70,7 @@ const Layout = () => {
         )}
       </div>
       <Outlet />
+      <div className=" w-[100%] "></div>
     </div>
   );
 };

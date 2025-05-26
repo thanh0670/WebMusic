@@ -21,7 +21,7 @@ const AdminSongsPage = () => {
 
   useEffect(() => {
     if (currentStatus === "failed") {
-      navigate("/"); // chỉ navigate nếu chắc chắn currentUser failed
+      navigate("/HomePage"); // chỉ navigate nếu chắc chắn currentUser failed
     }
   }, [currentStatus, navigate]);
 
@@ -37,20 +37,20 @@ const AdminSongsPage = () => {
 
   return (
     <div className="w-[100%] h-[100%] overflow-auto">
-      <div className="p-[69px] grid grid-cols-3 gap-y-[150px]">
+      <div className="p-[69px] grid grid-cols-3 gap-y-[50px] ">
         {data?.songs.map((item, index) => {
           return (
             <div
               onClick={() => navigate(`/admin/manage/${item._id}`)}
               key={index}
-              className="flex flex-col gap-[5px] cursor-pointer"
+              className="w-[220px] flex flex-col gap-[5px] cursor-pointer"
             >
               <img
                 src={item.url_img}
                 alt=""
-                className="w-[200px] h-[200px] object-cover"
+                className="w-[220px] h-[220px] object-cover"
               />
-              <p className=" text-[18px] text-[white] font-[550]">
+              <p className=" text-[18px] text-[white] font-[550] ">
                 {item.title}
               </p>
               <p className=" text-[16px] text-[#B0B0B0]">{item.artist}</p>

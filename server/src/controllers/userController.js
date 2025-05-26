@@ -1,10 +1,11 @@
-const bcrypt = require('bcrypt')
-const asyncHandler = require('express-async-handler')
-const jwt = require('jsonwebtoken')
-const { pushTokenToBlackList } = require('../databases/redis/redisJwt')
-const RefreshModel = require('../models/refreshModel')
-const { DateTime } = require('luxon')
+const bcrypt = require("bcrypt");
+const asyncHandler = require("express-async-handler");
+const jwt = require("jsonwebtoken");
+const { pushTokenToBlackList } = require("../databases/redis/redisJwt");
+const RefreshModel = require("../models/refreshModel");
+const { DateTime } = require("luxon");
 const User = require("../models/userModel");
+const songModel = require("../models/songModel");
 
 //@desc Register User
 //@route POST /api/users/register
@@ -38,9 +39,12 @@ const register = asyncHandler(async (req, res) => {
     });
 
     if (user) {
-      res
-        .status(201)
-        .json({ _id: user.id, email: user.email, username: user.username, success: true });
+      res.status(201).json({
+        _id: user.id,
+        email: user.email,
+        username: user.username,
+        success: true,
+      });
     } else {
       res.status(400);
       throw new Error("User data is not valid");
@@ -56,7 +60,8 @@ const register = asyncHandler(async (req, res) => {
 //@access private
 const login = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
-  const ipAddress = req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+  const ipAddress =
+    req.ip || req.headers["x-forwarded-for"] || req.connection.remoteAddress;
   const userAgent = req.useragent;
 
   const time = String(
@@ -82,9 +87,10 @@ const login = asyncHandler(async (req, res) => {
         user: {
           username: user.username,
           email: user.email,
-          id: user.id
+          id: user.id,
         },
-      }, process.env.JWT_SECRET_KEY,
+      },
+      process.env.JWT_SECRET_KEY,
       {
         expiresIn: "15m",
       }
@@ -99,16 +105,15 @@ const login = asyncHandler(async (req, res) => {
         user: {
           username: user.username,
           email: user.email,
-          id: user.id
+          id: user.id,
         },
-      }, process.env.REFRESH_SECRET_KEY,
+      },
+      process.env.REFRESH_SECRET_KEY,
       {
         expiresIn: "30d",
       }
     );
     console.log("refreshToken");
-
-
 
     RefreshModel.create({
       email: user.email,
@@ -118,13 +123,11 @@ const login = asyncHandler(async (req, res) => {
         userAgent: userAgent.browser,
       },
       token: refreshToken,
-      time: time
-    })
-
-
+      time: time,
+    });
 
     // 30 * 24 * 60 * 60 * 1000 = 30 days
-    res.cookie('refreshToken', refreshToken, {
+    res.cookie("refreshToken", refreshToken, {
       maxAge: 30 * 24 * 60 * 60 * 1000,
       httpOnly: true,
       secure: true,
@@ -132,7 +135,10 @@ const login = asyncHandler(async (req, res) => {
       // path: "/"
     });
     res.status(200).json({
-      accessToken, username: user.username, success: true, role: user.role
+      accessToken,
+      username: user.username,
+      success: true,
+      role: user.role,
     });
   } else {
     res.status(401);
@@ -148,11 +154,11 @@ const login = asyncHandler(async (req, res) => {
 //@access private
 const current = asyncHandler(async (req, res) => {
   res.status(200).json({
-    email:req.user.email,
+    email: req.user.email,
     role: req.user.role,
-    id:req.user.id});
-}
-)
+    id: req.user.id,
+  });
+});
 
 //@desc Logout User
 //@route POST /api/users/logout
@@ -162,7 +168,6 @@ const logout = asyncHandler(async (req, res) => {
   const cookie = req.cookies.refreshToken;
 
   try {
-
     if (!cookie) {
       return res.status(400).json({
         message: "Không có refreshToken trong cookie!",
@@ -173,37 +178,32 @@ const logout = asyncHandler(async (req, res) => {
     try {
       await pushTokenToBlackList(email, token, 900);
       await RefreshModel.findOneAndDelete({ token: cookie });
-
     } catch (error) {
       console.log(error);
-
     }
     // clear cookie from client
-    res.clearCookie('refreshToken', {
+    res.clearCookie("refreshToken", {
       httpOnly: true,
       secure: true, //     true khi có https
-      sameSite: "none",// none khi có https 
-      path: "/"
+      sameSite: "none", // none khi có https
+      path: "/",
     });
     console.log(req.cookies.refreshToken);
 
-
     if (req.cookies.refreshToken) {
       res.status(200).json({
-        message: "logout successfull", success: true
+        message: "logout successfull",
+        success: true,
       });
     } else {
       res.status(400).json({
-        message: "refreshToken Van Ton Tai"
-      })
+        message: "refreshToken Van Ton Tai",
+      });
     }
-  }
-  catch {
+  } catch {
     console.error("Server error:", error);
     res.status(500).json({ message: "Internal server error" });
   }
-
-
 
   res.status(200).json({ message: `${email} Log out successful` });
 });
@@ -227,12 +227,25 @@ const refresh = asyncHandler(async (req, res) => {
     );
 
     res.status(200).json({
-      accessToken
+      accessToken,
     });
   } catch (err) {
-    console.error('Error generating access token:', err);
-    res.status(500).json({ message: 'Error generating access token' });
+    console.error("Error generating access token:", err);
+    res.status(500).json({ message: "Error generating access token" });
   }
 });
 
-module.exports = { login, register, current, logout, refresh };
+const dataSongs = asyncHandler(async (req, res) => {
+  try {
+    const allSongs = await songModel.find(); // lấy tất cả dữ liệu
+    res.status(200).json({
+      message: "lấy dữ liệu thành công",
+      success: true,
+      songs: allSongs,
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Lỗi khi lấy dữ liệu bài hát", error });
+  }
+});
+
+module.exports = { login, register, current, logout, refresh, dataSongs };

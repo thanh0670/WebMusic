@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { uploadFiles } from "../../redux/features/API/postAudio";
+import { Svg1, Svg2 } from "./components/svgOfAdminUploadPage";
 
 const AdminUploadPage = () => {
   const imageInputRef = useRef(null);
@@ -64,42 +65,14 @@ const AdminUploadPage = () => {
     <div className=" w-[100%] h-[100%] flex flex-col">
       <div className=" w-full flex flex-row p-[25px] justify-between">
         <div className="flex flex-row  gap-[25px]">
-          <div className=" w-[50px] h-[50px] bg-[#232323] rounded-[100%] flex justify-center items-center cursor-pointer">
-            <svg
-              width="20"
-              height="40"
-              viewBox="0 0 20 40"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                fillRule="evenodd"
-                clipRule="evenodd"
-                d="M3.07169 18.8151L12.5 9.38676L14.8567 11.7434L6.60669 19.9934L14.8567 28.2434L12.5 30.6001L3.07169 21.1718C2.75924 20.8592 2.58371 20.4354 2.58371 19.9934C2.58371 19.5515 2.75924 19.1276 3.07169 18.8151Z"
-                fill="white"
-              />
-            </svg>
-          </div>
+          <Svg1 />
           <button className="w-[200px] h-[50px] bg-[#8F8F8F] rounded-tl-3xl rounded-bl-3xl rounded-tr-3xl rounded-br-3xl flex justify-center items-center text-[24px] text-[white] font-[550]">
             Upload
           </button>
         </div>
         <div className="w-[200px] h-[50px] p-[6px] bg-[#8F8F8F] rounded-tl-3xl rounded-bl-3xl rounded-tr-3xl rounded-br-3xl flex flex-row justify-between items-center ">
           <div className=" text-[white]">Admin</div>
-          <div className="w-[30px] h-[30px] flex justify-center items-center ">
-            <svg
-              width="20"
-              height="20"
-              viewBox="0 0 20 20"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M9.31501 16.3076C9.39146 16.4186 9.49375 16.5094 9.61308 16.5721C9.73241 16.6348 9.8652 16.6676 10 16.6676C10.1348 16.6676 10.2676 16.6348 10.3869 16.5721C10.5063 16.5094 10.6086 16.4186 10.685 16.3076L18.185 5.47425C18.2718 5.3493 18.3227 5.20294 18.3322 5.05109C18.3417 4.89923 18.3094 4.74768 18.2387 4.61291C18.1681 4.47814 18.0619 4.36529 17.9317 4.28663C17.8015 4.20797 17.6522 4.16651 17.5 4.16675H2.50001C2.34821 4.16738 2.19946 4.20937 2.06974 4.28822C1.94003 4.36707 1.83426 4.47978 1.76382 4.61424C1.69337 4.74871 1.66091 4.89983 1.66993 5.05136C1.67895 5.20289 1.72911 5.34909 1.81501 5.47425L9.31501 16.3076Z"
-                fill="white"
-              />
-            </svg>
-          </div>
+          <Svg2 />
         </div>
       </div>
       <div className="w-full h-full flex flex-col gap-[30px] justify-center items-center pl-[60px] pr-[60px]">

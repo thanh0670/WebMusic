@@ -1,11 +1,12 @@
-import './App.css';
-import React,{ useEffect } from 'react';
-import { UserProvider } from './contexts/UserContext';
-import MainRoute from './routes/routes';
-import { useDispatch,useSelector } from "react-redux";
-import { current } from './redux/features/counter/currentSlice';
-import { useNavigate,useLocation  } from "react-router";
-
+import "./App.css";
+import React, { useEffect } from "react";
+import { UserProvider } from "./contexts/UserContext";
+import MainRoute from "./routes/routes";
+import { useDispatch, useSelector } from "react-redux";
+import { current } from "./redux/features/counter/currentSlice";
+import { useNavigate, useLocation } from "react-router";
+import { dataUser } from "./redux/features/counter/valueUserSlice";
+import { getAlbumByUser } from "./redux/features/API/album/getAlbumByUser";
 
 function App() {
   const reduxDispatch = useDispatch();
@@ -15,17 +16,28 @@ function App() {
   const data = useSelector((state) => state.current.response);
   const error = useSelector((state) => state.current.error);
 
+  useEffect(() => {
+    reduxDispatch(current());
+    reduxDispatch(dataUser());
+    reduxDispatch(getAlbumByUser());
+  }, [reduxDispatch]);
+  useEffect(() => {
+    navigate("/HomePage");
+  }, []);
+  useEffect(() => {
+    console.log(status);
 
-  useEffect(()=>{
-    reduxDispatch( current())    
-  },[reduxDispatch])
-  
-  useEffect(()=>{
-    if(status ==="failed"){
-      navigate("/")
+    if (status === "failed") {
+      navigate("/HomePage");
     }
-  },[])
-  
+  }, [status]);
+  useEffect(() => {
+    if (status === "successed") {
+      if (data.role === "user") {
+        navigate("/HomePage");
+      }
+    }
+  }, []);
   useEffect(() => {
     if (data && status === "successed") {
       if (data.role === "admin") {
@@ -34,11 +46,12 @@ function App() {
         }
       } else {
         if (location.pathname.startsWith("/admin")) {
-          navigate("/");
+          navigate("/HomePage");
         }
       }
     }
   }, [status, data, error, navigate, location]);
+
   return (
     <div className="App">
       <UserProvider>

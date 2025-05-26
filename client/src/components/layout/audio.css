@@ -1,0 +1,136 @@
+/* AudioPlayerCustom.css */
+
+/* Nền audio player toàn bộ */
+.rhap_container {
+  background-color: #000 !important; /* nền đen */
+  color: #fff !important; /* chữ mặc định trắng */
+  box-shadow: none !important; /* nếu có shadow thì tắt luôn */
+   height: 150px !important;
+   position: relative;
+}
+
+/* Các nút chính (play, pause, next, prev, volume, loop) */
+.rhap_main-controls-button,
+.rhap_control-button {
+  color: #fff !important; /* màu trắng cho icon */
+  fill: #fff !important;
+  stroke: #fff !important;
+}
+
+/* Căn giữa cụm nút chính (play, prev, next) */
+.rhap_main-controls {
+  position: absolute;
+  top: 60%; /* Tùy chỉnh theo chiều cao player */
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  gap: 20px; /* khoảng cách giữa các nút */
+  align-items: center;
+  justify-content: center;
+}
+
+/* Thanh progress */
+.rhap_progress-bar {
+  background-color: #333 !important; /* nền thanh progress đậm */
+  border-radius: 4px;
+  height: 6px;
+  position: absolute;
+  top: 30px;
+  width: 90%;
+  margin-left: 40px;
+}
+
+.rhap_progress-filled {
+  background-color: #fff !important; /* màu fill thanh progress */
+  border-radius: 4px;
+  position: absolute;
+}
+
+/* Thời gian chạy nhạc */
+.rhap_time {
+  color: #fff !important;
+  font-weight: 600;
+  
+}
+
+/* Volume bar */
+.rhap_volume-bar {
+  background-color: #333 !important;
+  border-radius: 4px;
+  height: 6px;
+}
+
+.rhap_volume-filled {
+  background-color: #fff !important;
+  border-radius: 4px;
+}
+
+/* Tooltip (nếu dùng) */
+.rhap_tooltip {
+  color: #fff !important;
+  background-color: #222 !important;
+  border-radius: 3px;
+}
+
+/* Tắt màu mặc định khi hover */
+.rhap_control-button:hover,
+.rhap_main-controls-button:hover {
+  color: #ccc !important;
+  fill: #ccc !important;
+  stroke: #ccc !important;
+  background-color: transparent !important;
+}
+
+.rhap_repeat-button {
+  color: #fff !important;
+  fill: #fff !important;
+  stroke: #fff !important;
+  margin-left: auto; /* đẩy về bên phải nếu bọc trong flex */
+  margin-right: 130px;
+  margin-bottom: 30px;
+}
+
+
+/* Nút âm lượng */
+.rhap_volume-button {
+  color: #fff !important;
+  fill: #fff !important;
+  stroke: #fff !important;
+}
+
+/* Thanh dài của âm lượng */
+.rhap_volume-bar {
+  background-color: white !important;
+}
+
+/* Thanh ngang volume background */
+.rhap_volume-slider {
+  background-color: #fff !important; /* nền thanh volume màu trắng */
+}
+
+/* Di chuyển cả cụm volume ra bên trong 22px */
+.rhap_volume-container {
+  margin-right: 65px !important;
+}
+
+/* Phần đã fill (phần đã điều chỉnh âm lượng) */
+.rhap_volume-progress-filled {
+  background-color: #fff !important;
+}
+
+
+
+
+/* Canh trái */
+.rhap_current-time {
+  position: absolute;
+  left: 20px;
+  top: 25px;
+}
+
+/* Canh phải */
+.rhap_total-time {
+  position: absolute;
+  top: 25px;
+  right: 20px;
+}

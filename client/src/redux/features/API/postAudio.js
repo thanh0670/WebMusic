@@ -13,6 +13,7 @@ export const uploadFiles = createAsyncThunk(
   "dataAdmin/uploadFiles",
   async (fileData, { rejectWithValue }) => {
     const accessToken = localStorage.getItem("MUSIC_ACCESSTOKEN");
+
     const formData = fileData;
 
     const config = {
@@ -39,7 +40,12 @@ export const uploadFiles = createAsyncThunk(
 export const valueAudioSlice = createSlice({
   name: "postDataAdmin",
   initialState,
-  reducers: {},
+  reducers: {
+    resetStatus: (state) => {
+      state.status = null;
+      state.error = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(uploadFiles.pending, (state) => {
@@ -56,5 +62,5 @@ export const valueAudioSlice = createSlice({
       });
   },
 });
-
+export const { resetStatus } = valueAudioSlice.actions;
 export default valueAudioSlice.reducer;

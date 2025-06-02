@@ -65,7 +65,7 @@ export const albumUserSlice = createSlice({
         state.status = "loading";
       })
       .addCase(getAlbumByUser.fulfilled, (state, action) => {
-        state.status = "succeeded";
+        state.status = "successed";
         state.albums = action.payload;
       })
       .addCase(getAlbumByUser.rejected, (state, action) => {
@@ -77,7 +77,7 @@ export const albumUserSlice = createSlice({
         state.statusAlbum = "loading";
       })
       .addCase(createAlbum.fulfilled, (state, action) => {
-        state.statusAlbum = "succeeded";
+        state.statusAlbum = "successed";
         state.dataAlbums = action.payload;
       })
       .addCase(createAlbum.rejected, (state, action) => {

@@ -1,9 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { uploadFiles } from "../../redux/features/API/postAudio";
+import { resetStatus, uploadFiles } from "../../redux/features/API/postAudio";
 import { Svg1, Svg2 } from "./components/svgOfAdminUploadPage";
+import { useNavigate } from "react-router";
 
 const AdminUploadPage = () => {
+  const navigate = useNavigate();
+
   const imageInputRef = useRef(null);
   const [title, setTitle] = useState("");
   const [artist, setArtist] = useState("");
@@ -55,12 +58,17 @@ const AdminUploadPage = () => {
       setLyrics("");
       setAudioName(null);
       setFileName(null);
+      dispatch(resetStatus());
+      navigate(-1);
     }
     if (status === "failed") {
       alert(`Lỗi: ${error}`);
     }
   }, [status, error]);
 
+  if (status === "loading") {
+    return <div className=" text-[white] ">Đang tải dữ liệu...</div>;
+  }
   return (
     <div className=" w-[100%] h-[100%] flex flex-col">
       <div className=" w-full flex flex-row p-[25px] justify-between">

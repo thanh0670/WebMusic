@@ -8,6 +8,8 @@ const {
   toggleLike,
   incrementView,
   getSongStats,
+  createComment,
+  getCommentsBySong,
 } = require("../../../controllers/commetController");
 const {
   getAlbumsByUser,
@@ -24,6 +26,13 @@ router.get("/stats/:id", getSongStats);
 router.patch("/like/:id", validateAccessToken, auth(["user"]), toggleLike);
 router.route("/getData").get(dataSongs);
 
+// route comment
+router.route("/createComment").post(validateAccessToken, createComment);
+router
+  .route("/getCommentsBySong/:id")
+  .get(validateAccessToken, getCommentsBySong);
+
+// route album
 router.route("/getAlbumsByUser").get(validateAccessToken, getAlbumsByUser);
 router.route("/createAlbum").post(validateAccessToken, createAlbum);
 module.exports = router;

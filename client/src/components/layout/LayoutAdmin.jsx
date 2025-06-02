@@ -1,9 +1,36 @@
-import React from "react";
+import React, { useState } from "react";
 import { Outlet, Link } from "react-router";
-// import { useNavigate } from "react-router";
+import Svg2Logout from "../../pages/HomePage/components/svg2Logout";
+import axios from "axios";
 
 const LayoutAdmin = () => {
-  //   const navigate = useNavigate();
+  const token = localStorage.getItem("MUSIC_ACCESSTOKEN");
+  const email = localStorage.getItem("MUSIC_EMAIL");
+
+  const handleLogoutClick = async () => {
+    try {
+      const response = await axios.post(
+        "http://localhost:8000/api/users/logout",
+        {
+          email,
+          token,
+        },
+        { withCredentials: true }
+      );
+      if (response.data.success) {
+        localStorage.removeItem("MUSIC_ACCESSTOKEN");
+        localStorage.removeItem("MUSIC_USERNAME");
+        localStorage.removeItem("MUSIC_EMAIL");
+        window.location.reload();
+      }
+    } catch (error) {
+      if (error.response) {
+        alert(error.response.data.message);
+      } else {
+        alert("Có lỗi xảy ra, vui lòng thử lại sau.");
+      }
+    }
+  };
 
   return (
     <div className="w-[100vw] h-[100vh] bg-[#121212] flex flex-row">
@@ -155,7 +182,19 @@ const LayoutAdmin = () => {
           </div>
           <span className="absolute left-0 right-0 bottom-[-4px] h-[2px] bg-[#B0B0B0] w-0 transition-all duration-300 group-hover:w-full"></span>
         </div>
-        <div></div>
+        <div className="w-[100%] ">
+          <div className=" w-[100%] mt-[100px]">
+            <button
+              className="flex flex-row justify-center items-center gap-[4px] bg-[#C54B6C] w-[200px] h-[45px] rounded-tl-3xl rounded-bl-3xl rounded-tr-3xl rounded-br-3xl"
+              onClick={handleLogoutClick}
+            >
+              Log out
+              <span>
+                <Svg2Logout />
+              </span>
+            </button>
+          </div>
+        </div>
       </div>
       <Outlet />
     </div>

@@ -1,6 +1,7 @@
 const commentModel = require("../models/commetModel");
 const asyncHandler = require("express-async-handler");
 const Song = require("../models/songModel");
+const mongoose = require("mongoose");
 
 const createComment = asyncHandler(async (req, res) => {
   try {
@@ -21,12 +22,13 @@ const createComment = asyncHandler(async (req, res) => {
 });
 const getCommentsBySong = asyncHandler(async (req, res) => {
   try {
-    const { songId } = req.params;
+    const { id } = req.params;
 
     const comments = await commentModel
-      .find({ songId })
+      .find({ songId: new mongoose.Types.ObjectId(id) }) // ✅ Đúng cú pháp
       .populate("userId", "username")
       .sort({ createdAt: -1 });
+    console.log(comments);
 
     res.status(200).json(comments);
   } catch (err) {

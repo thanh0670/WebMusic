@@ -6,6 +6,7 @@ import { useNavigate } from "react-router";
 import {
   setCurrentSong,
   setCurrentAlbum,
+  setArrayDataSong,
 } from "../../redux/features/counter/playerSlice";
 import axios from "axios";
 import Svg1 from "./components/svg1";
@@ -21,7 +22,9 @@ const HomePage = () => {
   const [song, setSong] = useState(null);
   const [nameAlbum, setNameAlbum] = useState("");
   const [showOverlay, setShowOverlay] = useState(false);
+  const [audio, setAudio] = useState(false);
   const token = localStorage.getItem("MUSIC_ACCESSTOKEN");
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -40,21 +43,33 @@ const HomePage = () => {
   const handelChange = (e) => {
     setNameAlbum(e.target.value);
   };
-  const handleAlbumClick = () => {
-    dispatch(createAlbum(nameAlbum));
+  const handelImgClick = () => {
+    setAudio(true);
+  };
+
+  const handleAlbumClick = (item) => {
+    console.log(item);
     setShowOverlay(false);
-    navigate("/AudioPage");
+    navigate(`/AudioPage/${item._id}/albums`);
     dispatch(setCurrentAlbum("album"));
   };
+  const handleCreateAlbumClick = () => {
+    dispatch(createAlbum(nameAlbum));
+    setShowOverlay(false);
+  };
+
   useEffect(() => {
     console.log(statusAlbum);
-    if (statusAlbum === "successed") {
+    if (statusAlbum === "successed" && Albums) {
+      dispatch(getAlbumByUser());
       console.log(Albums, "moi tao");
+      setShowOverlay(false);
     }
-  }, [statusAlbum, Albums]);
+  }, [statusAlbum, Albums, dispatch]);
   useEffect(() => {
     if (currentStatus === "successed" && currentUser) {
       dispatch(dataUser());
+      dispatch(getAlbumByUser());
       setState(true);
     }
   }, [currentStatus, currentUser, dispatch]);
@@ -63,6 +78,9 @@ const HomePage = () => {
     if (status === "successed" && data) {
       const random = getRandomSongs(data.songs, 4);
       setSong(random);
+      if (random) {
+        dispatch(setArrayDataSong(random));
+      }
       console.log(data, "hello");
     }
   }, [status, data]);
@@ -124,6 +142,7 @@ const HomePage = () => {
                   <div
                     key={index}
                     className=" w-[200px] flex flex-col gap-[0px]"
+                    onClick={handelImgClick}
                   >
                     <img
                       src={item.url_img}
@@ -181,7 +200,7 @@ const HomePage = () => {
                 </button>
                 <button
                   className=" w-[100px] h-[50px] bg-[#C54B6C] text-white rounded-xl mt-[39px]"
-                  onClick={handleAlbumClick}
+                  onClick={handleCreateAlbumClick}
                 >
                   Tạo
                 </button>
@@ -209,8 +228,9 @@ const HomePage = () => {
                   {Albums?.albums?.map((item, index) => {
                     return (
                       <div
-                        onClick={handleAlbumClick}
+                        onClick={() => handleAlbumClick(item)}
                         className=" cursor-pointer"
+                        key={index}
                       >
                         {item.name}
                       </div>
@@ -231,17 +251,31 @@ const HomePage = () => {
           </div>
           <div>
             {token ? (
-              <div className=" w-[100%] flex justify-center items-center">
-                <button
-                  className="flex flex-row justify-center items-center gap-[4px] bg-[#C54B6C] w-[200px] h-[45px] rounded-tl-3xl rounded-bl-3xl rounded-tr-3xl rounded-br-3xl"
-                  onClick={handleLogoutClick}
-                >
-                  Log out
-                  <span>
-                    <Svg2Logout />
-                  </span>
-                </button>
-              </div>
+              audio ? (
+                <div className=" w-[100%] flex justify-center items-center mb-[100px]">
+                  <button
+                    className="flex flex-row justify-center items-center gap-[4px] bg-[#C54B6C] w-[200px] h-[45px] rounded-tl-3xl rounded-bl-3xl rounded-tr-3xl rounded-br-3xl"
+                    onClick={handleLogoutClick}
+                  >
+                    Log out
+                    <span>
+                      <Svg2Logout />
+                    </span>
+                  </button>
+                </div>
+              ) : (
+                <div className=" w-[100%] flex justify-center items-center">
+                  <button
+                    className="flex flex-row justify-center items-center gap-[4px] bg-[#C54B6C] w-[200px] h-[45px] rounded-tl-3xl rounded-bl-3xl rounded-tr-3xl rounded-br-3xl"
+                    onClick={handleLogoutClick}
+                  >
+                    Log out
+                    <span>
+                      <Svg2Logout />
+                    </span>
+                  </button>
+                </div>
+              )
             ) : (
               <div className=" w-[100%] flex justify-center items-center">
                 <p className=" w-[80%] font-robotoCondensed text-[#C54B6C] text-[20px] text-center ">

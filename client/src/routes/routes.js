@@ -18,8 +18,8 @@ export default function MainRoute() {
         <Route path="HomePage" element={<Layout />}>
           <Route index element={<HomePage />} />
         </Route>
-        <Route path="AudioPage" element={<LayoutAudio />}>
-          <Route index element={<AudioPage />} />
+        <Route path="AudioPage/:id" element={<LayoutAudio />}>
+          <Route path="albums" element={<AudioPage />} />
         </Route>
       </Route>
       <Route path="LoginPage" element={<LoginPage />} />

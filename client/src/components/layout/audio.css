@@ -86,7 +86,7 @@
   fill: #fff !important;
   stroke: #fff !important;
   margin-left: auto; /* đẩy về bên phải nếu bọc trong flex */
-  margin-right: 130px;
+  margin-right: 280px;
   margin-bottom: 30px;
 }
 
@@ -108,7 +108,7 @@
   background-color: #fff !important; /* nền thanh volume màu trắng */
 }
 
-/* Di chuyển cả cụm volume ra bên trong 22px */
+/* Di chuyển cả cụm volume ra bên trong */
 .rhap_volume-container {
   margin-right: 65px !important;
 }
@@ -133,4 +133,23 @@
   position: absolute;
   top: 25px;
   right: 20px;
+}
+
+.audio-container {
+  transition: all 0.5s ease-in-out;
+}
+
+.audio-container.fullscreen {
+  height: 100vh;
+  background-color: #ff69b4;
+
+}
+/* audio.css */
+
+.custom-audio-player {
+  background-color: #121212;
+}
+
+.fullscreen-audio {
+  background-color: #ec4899 !important; /* Màu hồng */
 }

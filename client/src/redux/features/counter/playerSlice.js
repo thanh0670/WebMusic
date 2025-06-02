@@ -1,9 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { data } from "react-router";
 
 const initialState = {
-  dataSong: null,
-  data: null,
+  dataSong: null, // Bài hát đang phát
+  data: null, // Thông tin album hiện tại
+  arrayDataSong: [], // Danh sách bài hát trong album
+  currentIndex: 0, // Index bài hát đang phát
 };
 
 const playerSlice = createSlice({
@@ -16,8 +17,36 @@ const playerSlice = createSlice({
     setCurrentAlbum: (state, action) => {
       state.data = action.payload;
     },
+    setArrayDataSong: (state, action) => {
+      state.arrayDataSong = action.payload;
+    },
+    setCurrentIndex: (state, action) => {
+      state.currentIndex = action.payload;
+      // Cập nhật luôn bài hát tương ứng:
+      const song = state.arrayDataSong[action.payload];
+      if (song) state.dataSong = song;
+    },
+    nextSong: (state) => {
+      const nextIdx = (state.currentIndex + 1) % state.arrayDataSong.length;
+      state.currentIndex = nextIdx;
+      state.dataSong = state.arrayDataSong[nextIdx];
+    },
+    prevSong: (state) => {
+      const length = state.arrayDataSong.length;
+      const prevIdx = (state.currentIndex - 1 + length) % length;
+      state.currentIndex = prevIdx;
+      state.dataSong = state.arrayDataSong[prevIdx];
+    },
   },
 });
 
-export const { setCurrentSong, setCurrentAlbum } = playerSlice.actions;
+export const {
+  setCurrentSong,
+  setCurrentAlbum,
+  setArrayDataSong,
+  setCurrentIndex,
+  nextSong,
+  prevSong,
+} = playerSlice.actions;
+
 export default playerSlice.reducer;

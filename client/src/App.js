@@ -18,26 +18,25 @@ function App() {
 
   useEffect(() => {
     reduxDispatch(current());
-    reduxDispatch(dataUser());
-    reduxDispatch(getAlbumByUser());
   }, [reduxDispatch]);
+
+  useEffect(() => {
+    if (data && status === "successed") {
+      if (data.role === "user") {
+        reduxDispatch(dataUser());
+        reduxDispatch(getAlbumByUser());
+      }
+    }
+  }, [data, status, reduxDispatch, navigate]);
   useEffect(() => {
     navigate("/HomePage");
   }, []);
   useEffect(() => {
     console.log(status);
-
     if (status === "failed") {
       navigate("/HomePage");
     }
   }, [status]);
-  useEffect(() => {
-    if (status === "successed") {
-      if (data.role === "user") {
-        navigate("/HomePage");
-      }
-    }
-  }, []);
   useEffect(() => {
     if (data && status === "successed") {
       if (data.role === "admin") {

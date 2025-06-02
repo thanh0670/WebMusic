@@ -11,8 +11,11 @@ import {
   Svg5,
 } from "./components/svgOfAdminManagerPage";
 import { deleteAudio } from "../../redux/features/API/deleteAudio";
+import { useNavigate } from "react-router";
 
 const AdminManagerPage = () => {
+  const navigate = useNavigate();
+
   const { id } = useParams();
   const [state, setState] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
@@ -37,6 +40,18 @@ const AdminManagerPage = () => {
       dispatch(dataAdmin());
     }
   }, [currentStatus, currentUser, dispatch]);
+
+  useEffect(() => {
+    if (state) {
+      setTitle(state.title || "");
+      setArtist(state.artist || "");
+      setLyrics(state.lyrics || "");
+    }
+  }, [state]);
+  useEffect(() => {
+    console.log(statusDelete);
+  }, [statusDelete]);
+
   useEffect(() => {
     if (status === "successed" && data?.songs) {
       // Tìm bài hát với _id khớp với id từ URL
@@ -55,9 +70,6 @@ const AdminManagerPage = () => {
       setFileName(file);
     }
   };
-  useEffect(() => {
-    console.log(statusDelete);
-  }, [statusDelete]);
 
   const handleButtonClick = () => {
     fileInputRef.current.click(); // bấm nút thì kích hoạt chọn file
@@ -103,6 +115,13 @@ const AdminManagerPage = () => {
   }
   if (statusPut === "failed" || !state) {
     return <div className=" text-[white]">Không tìm thấy bài hát.</div>;
+  }
+  if (statusDelete === "loading") {
+    return <div className=" text-[white] ">Đang xóa...</div>;
+  }
+  if (statusDelete === "succeeded") {
+    alert("xoa thanh cong");
+    navigate(-1);
   }
   return (
     <div className=" w-[100%] h-[100%] flex flex-col overflow-auto">

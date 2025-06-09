@@ -33,6 +33,9 @@ router
   .get(validateAccessToken, getCommentsBySong);
 
 // route album
+router.route("/getAlbumDetail/:id").get(validateAccessToken, getAlbumDetail);
 router.route("/getAlbumsByUser").get(validateAccessToken, getAlbumsByUser);
 router.route("/createAlbum").post(validateAccessToken, createAlbum);
+router.route("/addSongToAlbum").post(validateAccessToken, addSongToAlbum);
+
 module.exports = router;

@@ -4,6 +4,7 @@ const initialState = {
   dataSong: null, // Bài hát đang phát
   data: null, // Thông tin album hiện tại
   arrayDataSong: [], // Danh sách bài hát trong album
+  originalArraySong: [],
   currentIndex: 0, // Index bài hát đang phát
 };
 
@@ -19,6 +20,9 @@ const playerSlice = createSlice({
     },
     setArrayDataSong: (state, action) => {
       state.arrayDataSong = action.payload;
+    },
+    setOriginalArraySong(state, action) {
+      state.originalArraySong = action.payload;
     },
     setCurrentIndex: (state, action) => {
       state.currentIndex = action.payload;
@@ -45,6 +49,7 @@ export const {
   setCurrentAlbum,
   setArrayDataSong,
   setCurrentIndex,
+  setOriginalArraySong,
   nextSong,
   prevSong,
 } = playerSlice.actions;

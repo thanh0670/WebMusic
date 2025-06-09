@@ -1,16 +1,26 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Outlet, Link } from "react-router";
-import { getAlbumByUser } from "../../redux/features/API/album/getAlbumByUser";
+import { Outlet, Link, useParams } from "react-router";
+import { useNavigate } from "react-router";
+
+import {
+  getAlbumByUser,
+  getAlbumDetail,
+} from "../../redux/features/API/album/getAlbumByUser";
 
 const LayoutAudio = () => {
   const Albums = useSelector((state) => state.albums.albums);
+  const { id } = useParams(); // Lấy id từ URL
 
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getAlbumByUser());
+    dispatch(getAlbumDetail(id));
   }, []);
 
+  useEffect(() => {
+    console.log(id, "id");
+  }, [id]);
   useEffect(() => {
     console.log(Albums, "new");
   }, [Albums]);
@@ -59,9 +69,9 @@ const LayoutAudio = () => {
                 <path
                   d="M35 35.0001L27.7616 27.7618M27.7616 27.7618C28.9998 26.5236 29.9819 25.0537 30.652 23.436C31.3221 21.8183 31.667 20.0844 31.667 18.3334C31.667 16.5824 31.3221 14.8486 30.652 13.2309C29.9819 11.6131 28.9998 10.1432 27.7616 8.9051C26.5235 7.66695 25.0536 6.6848 23.4359 6.01472C21.8182 5.34464 20.0843 4.99976 18.3333 4.99976C16.5823 4.99976 14.8484 5.34464 13.2307 6.01472C11.613 6.6848 10.1431 7.66695 8.90498 8.9051C6.40443 11.4056 4.99963 14.7971 4.99963 18.3334C4.99963 21.8697 6.40443 25.2612 8.90498 27.7618C11.4055 30.2623 14.797 31.6671 18.3333 31.6671C21.8696 31.6671 25.2611 30.2623 27.7616 27.7618Z"
                   stroke="#B0B0B0"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                 />
               </svg>
             </div>
@@ -71,7 +81,7 @@ const LayoutAudio = () => {
             <span className="absolute left-0 right-0 bottom-[-4px] h-[2px] bg-[#B0B0B0] w-0 transition-all duration-300 group-hover:w-full"></span>
           </div>
         </Link>
-        <Link>
+        <Link to="LibaryPage">
           <div
             className="flex flex-row gap-[17px]  items-center cursor-pointer relative group "
             style={{ width: "fit-content" }}
@@ -142,8 +152,8 @@ const LayoutAudio = () => {
         </div>
         <div></div>
       </div>
-      <div className="flex flex-col">
-        <div className="w-[100%] flex flex-row gap-[850px] pt-[25px] pl-[40px] pb-[30px]">
+      <div className="flex flex-col w-[100%]">
+        <div className="w-[100%] flex flex-row gap-[900px] pt-[25px] pl-[40px] pb-[30px]">
           <div className="flex flex-row gap-[15px]">
             <div className=" w-[50px] h-[50px] rounded-[100%] bg-[#C58598] flex justify-center items-center cursor-pointer">
               <svg
@@ -154,8 +164,8 @@ const LayoutAudio = () => {
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
+                  fillRule="evenodd"
+                  clipRule="evenodd"
                   d="M3.07169 18.8151L12.5 9.38676L14.8567 11.7434L6.60669 19.9934L14.8567 28.2434L12.5 30.6001L3.07169 21.1718C2.75924 20.8592 2.58371 20.4354 2.58371 19.9934C2.58371 19.5515 2.75924 19.1276 3.07169 18.8151Z"
                   fill="white"
                 />
@@ -170,8 +180,8 @@ const LayoutAudio = () => {
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
+                  fillRule="evenodd"
+                  clipRule="evenodd"
                   d="M16.9283 21.1849L7.49998 30.6132L5.14331 28.2566L13.3933 20.0066L5.14331 11.7566L7.49998 9.3999L16.9283 18.8282C17.2408 19.1408 17.4163 19.5646 17.4163 20.0066C17.4163 20.4485 17.2408 20.8724 16.9283 21.1849Z"
                   fill="white"
                 />
@@ -196,7 +206,7 @@ const LayoutAudio = () => {
             </div>
           </div>
         </div>
-        <Outlet />
+        <Outlet context={{ albumId: id }} />
       </div>
     </div>
   );

@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { data } from "react-router";
 
 const initialState = {
   albums: [],
@@ -8,7 +9,34 @@ const initialState = {
   dataAlbums: null,
   statusAlbum: "idle",
   errorAlbum: null,
+  dataAlbumDetail: null,
+  statusAlbumDetaill: "idle",
+  errorAlbumDetail: null,
+  dataAddAlbum: null,
+  statusAddAlbum: "idle",
+  errorAddAlbum: null,
 };
+export const getAlbumDetail = createAsyncThunk(
+  "albumUser/getAlbumDetail",
+  async (id, { rejectWithValue }) => {
+    try {
+      const accessToken = localStorage.getItem("MUSIC_ACCESSTOKEN");
+      const response = await axios.get(
+        `http://localhost:8000/api/users/getAlbumDetail/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data || { error: "Lỗi khi lấy chi tiết album" }
+      );
+    }
+  }
+);
 
 export const createAlbum = createAsyncThunk(
   "albums/createAlbum",
@@ -55,6 +83,30 @@ export const getAlbumByUser = createAsyncThunk(
   }
 );
 
+export const addSongToAlbum = createAsyncThunk(
+  "albums/addSongToAlbum",
+  async ({ albumId, songId }, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("MUSIC_ACCESSTOKEN");
+      const response = await axios.post(
+        "http://localhost:8000/api/users/addSongToAlbum",
+        { albumId, songId },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          withCredentials: true,
+        }
+      );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data || { error: "Lỗi khi thêm bài hát vào album" }
+      );
+    }
+  }
+);
+
 export const albumUserSlice = createSlice({
   name: "albumUser",
   initialState,
@@ -83,6 +135,32 @@ export const albumUserSlice = createSlice({
       .addCase(createAlbum.rejected, (state, action) => {
         state.statusAlbum = "failed";
         state.errorAlbum = action.payload?.error || "Tạo album thất bại";
+      })
+      //getDetailAlbum
+      .addCase(getAlbumDetail.pending, (state) => {
+        state.statusAlbumDetaill = "loading";
+      })
+      .addCase(getAlbumDetail.fulfilled, (state, action) => {
+        state.statusAlbumDetaill = "succeeded";
+        state.dataAlbumDetail = action.payload; // Lưu chi tiết album vào state
+      })
+      .addCase(getAlbumDetail.rejected, (state, action) => {
+        state.statusAlbumDetaill = "failed";
+        state.errorAlbumDetail =
+          action.payload?.error || "Lỗi khi tải chi tiết album";
+      })
+      // addSongToAlbum
+      .addCase(addSongToAlbum.pending, (state) => {
+        state.statusAddAlbum = "loading"; // dùng lại status chi tiết nếu muốn
+      })
+      .addCase(addSongToAlbum.fulfilled, (state, action) => {
+        state.statusAddAlbum = "succeeded";
+        state.errorAddAlbum = action.payload.album; // cập nhật album mới sau khi thêm bài hát
+      })
+      .addCase(addSongToAlbum.rejected, (state, action) => {
+        state.statusAddAlbum = "failed";
+        state.errorAddAlbum =
+          action.payload?.error || "Thêm bài hát vào album thất bại";
       });
   },
 });

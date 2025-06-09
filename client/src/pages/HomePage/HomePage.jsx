@@ -7,6 +7,8 @@ import {
   setCurrentSong,
   setCurrentAlbum,
   setArrayDataSong,
+  setCurrentIndex,
+  setOriginalArraySong,
 } from "../../redux/features/counter/playerSlice";
 import axios from "axios";
 import Svg1 from "./components/svg1";
@@ -33,6 +35,7 @@ const HomePage = () => {
   const status = useSelector((state) => state.user.status);
   const Albums = useSelector((state) => state.albums.albums);
   const data = useSelector((state) => state.user.response);
+  const currentSong = useSelector((state) => state.audio.dataSong);
 
   const statusAlbum = useSelector((state) => state.albums.statusAlbum);
   const getRandomSongs = (songs, count = 4) => {
@@ -50,7 +53,7 @@ const HomePage = () => {
   const handleAlbumClick = (item) => {
     console.log(item);
     setShowOverlay(false);
-    navigate(`/AudioPage/${item._id}/albums`);
+    navigate(`/AudioPage/${item._id}`);
     dispatch(setCurrentAlbum("album"));
   };
   const handleCreateAlbumClick = () => {
@@ -80,6 +83,7 @@ const HomePage = () => {
       setSong(random);
       if (random) {
         dispatch(setArrayDataSong(random));
+        dispatch(setOriginalArraySong(random));
       }
       console.log(data, "hello");
     }
@@ -94,6 +98,9 @@ const HomePage = () => {
       }
     }
   }, [song, Albums]);
+  useEffect(() => {
+    console.log(currentSong, "curentySonf");
+  }, [currentSong]);
 
   if (currentStatus === "loading") {
     return <div>Đang kiểm tra đăng nhập...</div>;
@@ -123,6 +130,21 @@ const HomePage = () => {
       }
     }
   };
+  const handleSongClick = (songClicked) => {
+    // Lấy array bài hát hiện tại (ví dụ là mảng `song` trong state)
+    if (!song || song.length === 0) return;
+
+    // Tạo mảng mới, bài được click sẽ được đẩy lên đầu
+    const newArraySong = [
+      songClicked,
+      ...song.filter((s) => s._id !== songClicked._id),
+    ];
+
+    dispatch(setArrayDataSong(newArraySong)); // Cập nhật lại array song trong redux
+    dispatch(setCurrentSong(songClicked)); // Cập nhật bài hiện tại
+    dispatch(setCurrentIndex(0)); // Bài đầu tiên trong mảng mới
+  };
+
   return (
     <div className=" flex justify-center flex-row gap-[20px] bg-[#121212] ">
       <div className=" w-[1000px] h-[900px] bg-[#FFE3E3] rounded-tl-xl rounded-bl-xl rounded-tr-xl rounded-br-xl flex flex-col">
@@ -146,7 +168,7 @@ const HomePage = () => {
                   >
                     <img
                       src={item.url_img}
-                      onClick={() => dispatch(setCurrentSong(item))}
+                      onClick={() => handleSongClick(item)}
                       alt=""
                       className=" w-[200px] h-[200px] object-cover rounded-tl-xl rounded-bl-xl rounded-tr-xl rounded-br-xl cursor-pointer"
                     />
@@ -251,7 +273,7 @@ const HomePage = () => {
           </div>
           <div>
             {token ? (
-              audio ? (
+              audio || currentSong ? (
                 <div className=" w-[100%] flex justify-center items-center mb-[100px]">
                   <button
                     className="flex flex-row justify-center items-center gap-[4px] bg-[#C54B6C] w-[200px] h-[45px] rounded-tl-3xl rounded-bl-3xl rounded-tr-3xl rounded-br-3xl"

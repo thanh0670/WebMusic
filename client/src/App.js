@@ -18,14 +18,17 @@ function App() {
 
   useEffect(() => {
     reduxDispatch(current());
+    reduxDispatch(dataUser());
   }, [reduxDispatch]);
 
   useEffect(() => {
     if (data && status === "successed") {
       if (data.role === "user") {
-        reduxDispatch(dataUser());
         reduxDispatch(getAlbumByUser());
       }
+    } else if (status === "failed") {
+      reduxDispatch(current());
+      reduxDispatch(getAlbumByUser());
     }
   }, [data, status, reduxDispatch, navigate]);
   useEffect(() => {

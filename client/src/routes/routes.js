@@ -10,7 +10,7 @@ import AdminManagerPage from "../pages/adminPage/adminManagerPage";
 import Audio from "../components/layout/Audio";
 import LayoutAudio from "../components/layout/LayoutAudio";
 import AudioPage from "../pages/AudioPage/AudioPage";
-
+import LibaryPage from "../pages/AudioPage/components/Pages/libaryPage";
 export default function MainRoute() {
   return (
     <Routes>
@@ -19,7 +19,8 @@ export default function MainRoute() {
           <Route index element={<HomePage />} />
         </Route>
         <Route path="AudioPage/:id" element={<LayoutAudio />}>
-          <Route path="albums" element={<AudioPage />} />
+          <Route index element={<AudioPage />} />
+          <Route path="LibaryPage" element={<LibaryPage />} />
         </Route>
       </Route>
       <Route path="LoginPage" element={<LoginPage />} />

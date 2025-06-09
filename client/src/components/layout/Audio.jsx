@@ -42,6 +42,10 @@ const Audio = () => {
     }
   };
   const handleClose = () => setIsFullScreen(false);
+  useEffect(() => {
+    console.log(arraySong, "huhu");
+    console.log(dataSong, "haha");
+  }, [arraySong, dataSong]);
 
   useEffect(() => {
     if (isFullScreen) {
@@ -164,9 +168,8 @@ const Audio = () => {
                   </>
                 ) : (
                   <div className="w-full flex justify-center">
-                    <div className="w-[1000px] h-[400px] bg-white bg-opacity-20 rounded-xl p-4">
+                    <div className="w-[1000px] h-[500px] rounded-xl p-4">
                       <Playlist songs={data} />
-                      {/* <CarouselComponent /> nếu muốn thêm carousel ở đây */}
                     </div>
                   </div>
                 )}

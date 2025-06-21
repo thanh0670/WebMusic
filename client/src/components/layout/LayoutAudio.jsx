@@ -13,11 +13,19 @@ const LayoutAudio = () => {
   const { id } = useParams(); // Lấy id từ URL
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   useEffect(() => {
     dispatch(getAlbumByUser());
     dispatch(getAlbumDetail(id));
   }, []);
 
+  const handleleftClick = () => {
+    navigate(-1);
+  };
+  const handleRightClick = () => {
+    navigate(+1);
+  };
   useEffect(() => {
     console.log(id, "id");
   }, [id]);
@@ -152,10 +160,13 @@ const LayoutAudio = () => {
         </div>
         <div></div>
       </div>
-      <div className="flex flex-col w-[100%]">
-        <div className="w-[100%] flex flex-row gap-[900px] pt-[25px] pl-[40px] pb-[30px]">
+      <div className="flex flex-col w-[100vw] bg-[#FFE3E3]">
+        <div className="w-[100%] flex flex-row gap-[900px] pt-[25px] pl-[40px] pb-[10px] relative">
           <div className="flex flex-row gap-[15px]">
-            <div className=" w-[50px] h-[50px] rounded-[100%] bg-[#C58598] flex justify-center items-center cursor-pointer">
+            <div
+              className=" w-[50px] h-[50px] rounded-[100%] bg-[#C58598] flex justify-center items-center cursor-pointer"
+              onClick={handleleftClick}
+            >
               <svg
                 width="20"
                 height="40"
@@ -171,7 +182,10 @@ const LayoutAudio = () => {
                 />
               </svg>
             </div>
-            <div className=" w-[50px] h-[50px] rounded-[100%] bg-[#C58598] flex justify-center items-center cursor-pointer">
+            <div
+              className=" w-[50px] h-[50px] rounded-[100%] bg-[#C58598] flex justify-center items-center cursor-pointer"
+              onClick={handleRightClick}
+            >
               <svg
                 width="20"
                 height="40"
@@ -188,7 +202,7 @@ const LayoutAudio = () => {
               </svg>
             </div>
           </div>
-          <div className=" w-[200px] h-[50px] bg-[#C54B6C] rounded-tl-3xl rounded-bl-3xl rounded-tr-3xl rounded-br-3xl flex flex-row justify-between items-center pl-[6px] pr-[16px] ">
+          <div className=" absolute right-[20px] top-[20px] w-[200px] h-[50px] bg-[#C54B6C] rounded-tl-3xl rounded-bl-3xl rounded-tr-3xl rounded-br-3xl flex flex-row justify-between items-center pl-[6px] pr-[16px] ">
             <div></div>
             <div>
               <svg

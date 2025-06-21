@@ -3,11 +3,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { UserContext } from "../../contexts/UserContext";
 import { dataUser } from "../../redux/features/counter/valueUserSlice";
 import { useNavigate } from "react-router";
+import { Tooltip, TooltipProvider } from "react-tooltip";
+
 import {
   setCurrentSong,
   setCurrentAlbum,
   setArrayDataSong,
-  setCurrentIndex,
   setOriginalArraySong,
 } from "../../redux/features/counter/playerSlice";
 import axios from "axios";
@@ -17,6 +18,7 @@ import {
   createAlbum,
   getAlbumByUser,
 } from "../../redux/features/API/album/getAlbumByUser";
+import { current } from "../../redux/features/counter/currentSlice";
 
 const HomePage = () => {
   const { email, setUsername } = useContext(UserContext);
@@ -35,7 +37,9 @@ const HomePage = () => {
   const status = useSelector((state) => state.user.status);
   const Albums = useSelector((state) => state.albums.albums);
   const data = useSelector((state) => state.user.response);
+  const currentArrayDataSong = useSelector((state) => state.audio.dataSong);
   const currentSong = useSelector((state) => state.audio.dataSong);
+  const currentArraySong = useSelector((state) => state.audio.dataSong);
 
   const statusAlbum = useSelector((state) => state.albums.statusAlbum);
   const getRandomSongs = (songs, count = 4) => {
@@ -62,11 +66,13 @@ const HomePage = () => {
   };
 
   useEffect(() => {
+    dispatch(current());
+  }, []);
+  useEffect(() => {
     console.log(statusAlbum);
     if (statusAlbum === "successed" && Albums) {
       dispatch(getAlbumByUser());
       console.log(Albums, "moi tao");
-      setShowOverlay(false);
     }
   }, [statusAlbum, Albums, dispatch]);
   useEffect(() => {
@@ -79,7 +85,7 @@ const HomePage = () => {
 
   useEffect(() => {
     if (status === "successed" && data) {
-      const random = getRandomSongs(data.songs, 4);
+      const random = getRandomSongs(data?.songs, 4);
       setSong(random);
       if (random) {
         dispatch(setArrayDataSong(random));
@@ -131,18 +137,21 @@ const HomePage = () => {
     }
   };
   const handleSongClick = (songClicked) => {
-    // Lấy array bài hát hiện tại (ví dụ là mảng `song` trong state)
-    if (!song || song.length === 0) return;
+    // // Lấy array bài hát hiện tại (ví dụ là mảng `song` trong state)
+    // if (!song || song.length === 0) return;
 
-    // Tạo mảng mới, bài được click sẽ được đẩy lên đầu
-    const newArraySong = [
-      songClicked,
-      ...song.filter((s) => s._id !== songClicked._id),
-    ];
+    // // Tạo mảng mới, bài được click sẽ được đẩy lên đầu
+    // const newArraySong = [
+    //   songClicked,
+    //   ...song.filter((s) => s._id !== songClicked._id),
+    // ];
 
-    dispatch(setArrayDataSong(newArraySong)); // Cập nhật lại array song trong redux
+    // console.log(songClicked);
+
+    // dispatch(setArrayDataSong(newArraySong)); // Cập nhật lại array song trong redux
+    // dispatch(setCurrentIndex(0)); // Bài đầu tiên trong mảng mới
+
     dispatch(setCurrentSong(songClicked)); // Cập nhật bài hiện tại
-    dispatch(setCurrentIndex(0)); // Bài đầu tiên trong mảng mới
   };
 
   return (
@@ -193,12 +202,23 @@ const HomePage = () => {
           <p className=" font-robotoCondensed font-[800] text-[22px] text-[#C54B6C]">
             Your Library
           </p>
-          <div
-            className="cursor-pointer"
-            onClick={() => setShowOverlay(!showOverlay)}
-          >
-            <Svg1 />
-          </div>
+          <TooltipProvider>
+            <div
+              id="create-album-icon"
+              onClick={() => setShowOverlay(true)}
+              className="cursor-pointer"
+            >
+              <Svg1 />
+            </div>
+
+            <Tooltip
+              anchorId="create-album-icon"
+              place="bottom"
+              content="Tạo album"
+              delayShow={500}
+            />
+          </TooltipProvider>
+
           {showOverlay && (
             <>
               <div className="fixed inset-0 bg-black opacity-50 z-40" />

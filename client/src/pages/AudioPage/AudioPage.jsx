@@ -4,13 +4,24 @@ import NotNhacSvg from "./components/Svg/notNhacSvg";
 import { useOutletContext } from "react-router";
 
 import AddMusicToPlaylistComponent from "./components/components/addMusicToPlaylistComponent";
+import { current } from "../../redux/features/counter/currentSlice";
 
 const AudioPage = (pops) => {
+  const dispatch = useDispatch();
+
   const dataAlbumDetail = useSelector((state) => state.albums.dataAlbumDetail);
 
   const [isClick, setIsClick] = useState(false);
-  const { albumId } = useOutletContext();
+  // const [a, setA] = useState(false);
 
+  const { albumId } = useOutletContext();
+  const a = (e) => {
+    console.log(e);
+    setIsClick(e);
+  };
+  useEffect(() => {
+    dispatch(current());
+  }, [dispatch]);
   useEffect(() => {
     console.log(albumId, "albumId từ useOutletContext()");
   }, [albumId]);
@@ -51,7 +62,7 @@ const AudioPage = (pops) => {
           {isClick && (
             <div className="absolute top-0 right-[0px] w-[100%] h-[100%] bg-[#FFE3E3]">
               {/* <div className=" w-[30px] h-[30px] bg-[red]"></div> */}
-              <AddMusicToPlaylistComponent albumId={albumId} />
+              <AddMusicToPlaylistComponent albumId={albumId} isXClick={a} />
             </div>
           )}
         </div>

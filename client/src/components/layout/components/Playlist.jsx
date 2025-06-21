@@ -35,7 +35,7 @@ const Playlist = () => {
     key: song._id, // dùng _id làm key cố định để tránh unmount/mount Carousel
     content: (
       <div
-        className=" w-[400px] h-[400px] bg-black text-white flex items-center justify-center cursor-pointer rounded shadow"
+        className=" w-[400px] h-[400px] gap-[10px] object-cover bg-black text-white flex items-center justify-center cursor-pointer rounded shadow"
         style={{ opacity: 1 }}
       >
         <img
@@ -49,12 +49,12 @@ const Playlist = () => {
   }));
 
   return (
-    <div className="text-white">
+    <div className="text-white gap-[10px]">
       {arraySong?.length > 0 && (
         <Carroussel
           cards={cards}
           height="500px"
-          width="100%"
+          width={arraySong.length === 4 ? "70%" : "100%"}
           margin="0 auto"
           offset={2}
           showArrows={false}

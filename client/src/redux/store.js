@@ -8,6 +8,7 @@ import valueUserSlice from "./features/counter/valueUserSlice";
 import playerReducer from "./features/counter/playerSlice";
 import albumUserSlice from "./features/API/album/getAlbumByUser";
 import commentsReducer from "./features/API/comment/postAndGetComment";
+import songStatsReducer from "./features/API/like&view/like&view";
 export const store = configureStore({
   reducer: {
     current: currentSlice,
@@ -19,5 +20,6 @@ export const store = configureStore({
     audio: playerReducer,
     albums: albumUserSlice,
     commet: commentsReducer,
+    songStats: songStatsReducer,
   },
 });

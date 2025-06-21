@@ -21,6 +21,9 @@ const AddMusicToPlaylistComponent = (props) => {
     }
     dispatch(addSongToAlbum({ albumId: props.albumId, songId: e }));
   };
+  const handleIsClick = () => {
+    props.isXClick(false); // ✅ Gọi hàm cha với giá trị false
+  };
 
   useEffect(() => {
     if (dataUser && dataAlbumDetail) {
@@ -119,7 +122,10 @@ const AddMusicToPlaylistComponent = (props) => {
               })}
             </div>
           </div>
-          <div className=" absolute w-[40px] h-[40px] bg-[red] top-[15px] right-[15px] cursor-pointer rounded-tl-xl rounded-bl-xl rounded-tr-xl rounded-br-xl text-[30px] flex justify-center items-center text-[white]">
+          <div
+            className=" absolute w-[40px] h-[40px] bg-[red] top-[15px] right-[15px] cursor-pointer rounded-tl-xl rounded-bl-xl rounded-tr-xl rounded-br-xl text-[30px] flex justify-center items-center text-[white]"
+            onClick={handleIsClick}
+          >
             X
           </div>
         </div>

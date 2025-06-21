@@ -16,10 +16,12 @@ const {
   createAlbum,
   getAlbumDetail,
   addSongToAlbum,
+  deleteAlbum,
+  deleteSongFromAlbum,
 } = require("../../../controllers/albumController");
 const router = express.Router();
-// private
 
+// private
 router.route("/current").get(validateAccessToken, current);
 router.patch("/view/:id", incrementView);
 router.get("/stats/:id", getSongStats);
@@ -37,5 +39,9 @@ router.route("/getAlbumDetail/:id").get(validateAccessToken, getAlbumDetail);
 router.route("/getAlbumsByUser").get(validateAccessToken, getAlbumsByUser);
 router.route("/createAlbum").post(validateAccessToken, createAlbum);
 router.route("/addSongToAlbum").post(validateAccessToken, addSongToAlbum);
+router
+  .route("/deleteSongFromAlbum")
+  .delete(validateAccessToken, deleteSongFromAlbum);
+router.route("/deleteAlbum/:id").delete(validateAccessToken, deleteAlbum);
 
 module.exports = router;

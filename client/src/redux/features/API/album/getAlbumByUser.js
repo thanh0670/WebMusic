@@ -1,21 +1,35 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { data } from "react-router";
-
 const initialState = {
   albums: [],
   status: "idle",
   error: null,
+
+  // album by user
   dataAlbums: null,
   statusAlbum: "idle",
   errorAlbum: null,
+
+  // album detail
   dataAlbumDetail: null,
   statusAlbumDetaill: "idle",
   errorAlbumDetail: null,
+
+  // thêm bài hát vào album
   dataAddAlbum: null,
   statusAddAlbum: "idle",
   errorAddAlbum: null,
+
+  // xoá bài hát khỏi album
+  statusDeleteSong: "idle",
+  errorDeleteSong: null,
+
+  // xoá album
+  statusDeleteAlbum: "idle",
+  errorDeleteAlbum: null,
 };
+
 export const getAlbumDetail = createAsyncThunk(
   "albumUser/getAlbumDetail",
   async (id, { rejectWithValue }) => {
@@ -106,6 +120,52 @@ export const addSongToAlbum = createAsyncThunk(
     }
   }
 );
+export const deleteSongFromAlbum = createAsyncThunk(
+  "albums/deleteSongFromAlbum",
+  async ({ albumId, songId }, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("MUSIC_ACCESSTOKEN");
+      const response = await axios.delete(
+        `http://localhost:8000/api/users/deleteSongFromAlbum`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          data: { albumId, songId }, // ✔ chính xác
+        }
+      );
+      return { albumId, songId, message: response.data.message };
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data || { error: "Lỗi khi xoá bài hát khỏi album" }
+      );
+    }
+  }
+);
+
+export const deleteAlbum = createAsyncThunk(
+  "albums/deleteAlbum",
+  async (albumId, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("MUSIC_ACCESSTOKEN");
+
+      const response = await axios.delete(
+        `http://localhost:8000/api/users/deleteAlbum/${albumId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // ✅ Đảm bảo định dạng Bearer token
+          },
+        }
+      );
+
+      return { albumId, message: response.data.message };
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data || { error: "Lỗi khi xoá album" }
+      );
+    }
+  }
+);
 
 export const albumUserSlice = createSlice({
   name: "albumUser",
@@ -161,6 +221,41 @@ export const albumUserSlice = createSlice({
         state.statusAddAlbum = "failed";
         state.errorAddAlbum =
           action.payload?.error || "Thêm bài hát vào album thất bại";
+      })
+      // xoá bài hát khỏi album
+      .addCase(deleteSongFromAlbum.pending, (state) => {
+        state.statusDeleteSong = "loading";
+      })
+      .addCase(deleteSongFromAlbum.fulfilled, (state, action) => {
+        state.statusDeleteSong = "succeeded";
+
+        // cập nhật lại album detail nếu có
+        if (state.dataAlbumDetail && state.dataAlbumDetail.songs) {
+          state.dataAlbumDetail.songs = state.dataAlbumDetail.songs.filter(
+            (song) => song._id !== action.payload.songId
+          );
+        }
+      })
+      .addCase(deleteSongFromAlbum.rejected, (state, action) => {
+        state.statusDeleteSong = "failed";
+        state.errorDeleteSong = action.payload?.error || "Xoá bài hát thất bại";
+      })
+
+      // xoá album
+      .addCase(deleteAlbum.pending, (state) => {
+        state.statusDeleteAlbum = "loading";
+      })
+      .addCase(deleteAlbum.fulfilled, (state, action) => {
+        state.statusDeleteAlbum = "succeeded";
+
+        // Xoá album khỏi danh sách
+        state.albums.albums = state.albums.albums.filter(
+          (album) => album._id !== action.payload
+        );
+      })
+      .addCase(deleteAlbum.rejected, (state, action) => {
+        state.statusDeleteAlbum = "failed";
+        state.errorDeleteAlbum = action.payload?.error || "Xoá album thất bại";
       });
   },
 });

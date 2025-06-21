@@ -18,6 +18,10 @@ function App() {
 
   useEffect(() => {
     reduxDispatch(current());
+    // if (status === "failed") {
+    //   reduxDispatch(current());
+    // }
+
     reduxDispatch(dataUser());
   }, [reduxDispatch]);
 
@@ -27,19 +31,19 @@ function App() {
         reduxDispatch(getAlbumByUser());
       }
     } else if (status === "failed") {
-      reduxDispatch(current());
+      // reduxDispatch(current());
       reduxDispatch(getAlbumByUser());
     }
   }, [data, status, reduxDispatch, navigate]);
   useEffect(() => {
     navigate("/HomePage");
   }, []);
-  useEffect(() => {
-    console.log(status);
-    if (status === "failed") {
-      navigate("/HomePage");
-    }
-  }, [status]);
+  // useEffect(() => {
+  //   console.log(status);
+  //   if (status === "failed") {
+  //     navigate("/HomePage");
+  //   }
+  // });
   useEffect(() => {
     if (data && status === "successed") {
       if (data.role === "admin") {

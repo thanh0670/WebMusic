@@ -15,15 +15,25 @@ import {
 import BinhLuanSvg from "./components/SVG/binhLuanSvg";
 import BinhLuanComponent from "./components/binhLuanComponent";
 import { getComments } from "../../redux/features/API/comment/postAndGetComment";
+import TimSvg from "./components/SVG/timSvg";
+import {
+  fetchSongStats,
+  incrementView,
+  toggleLike,
+} from "../../redux/features/API/like&view/like&view";
 
 const Audio = () => {
   const dispatch = useDispatch();
+  const { views, totalLikes, liked } = useSelector((state) => state.songStats);
+
   const data = useSelector((state) => state.audio.data);
   const dataSong = useSelector((state) => state.audio.dataSong);
   const arraySong = useSelector((state) => state.audio.arrayDataSong);
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [activeTab, setActiveTab] = useState("lyrics");
   const [isClickComment, setIsClickComment] = useState(false);
+
+  const songId = dataSong?._id;
 
   const commentRef = useRef(null);
 
@@ -46,6 +56,17 @@ const Audio = () => {
     console.log(arraySong, "huhu");
     console.log(dataSong, "haha");
   }, [arraySong, dataSong]);
+  useEffect(() => {
+    console.log({ views, liked, totalLikes }, "3");
+  }, [views, totalLikes, liked]);
+  useEffect(() => {
+    dispatch(incrementView(songId));
+    dispatch(fetchSongStats(songId));
+  }, [dispatch, songId]);
+
+  // const handleLike = () => {
+  //   dispatch(toggleLike(songId));
+  // };
 
   useEffect(() => {
     if (isFullScreen) {
@@ -58,6 +79,8 @@ const Audio = () => {
     };
   }, [isFullScreen]);
   useEffect(() => {
+    console.log(dataSong, "datasong");
+
     const index = arraySong.findIndex((song) => song._id === dataSong?._id);
     if (index !== -1) {
       dispatch(setCurrentIndex(index));
@@ -83,7 +106,7 @@ const Audio = () => {
     <div className="relative">
       <Outlet />
 
-      {(dataSong || data === "album") && (
+      {dataSong && (
         <div
           className={`fixed inset-x-0 bottom-0 z-[110] transition-all duration-500 ease-in-out ${
             isFullScreen ? "h-screen bg-[#FFE3E3]" : "h-[100px] bg-[#121212]"
@@ -167,8 +190,8 @@ const Audio = () => {
                     </div>
                   </>
                 ) : (
-                  <div className="w-full flex justify-center">
-                    <div className="w-[1000px] h-[500px] rounded-xl p-4">
+                  <div className="w-[100vw] flex justify-center items-centers">
+                    <div className="w-[100vw] h-[500px] rounded-xl p-4">
                       <Playlist songs={data} />
                     </div>
                   </div>
@@ -182,6 +205,15 @@ const Audio = () => {
             <div className="absolute z-30 bottom-[30px] right-[25px]">
               <div onClick={handleSVGClick}>
                 <MyCustomSVG />
+              </div>
+            </div>
+          )}
+
+          {/* Nút tim */}
+          {isFullScreen && (
+            <div className="absolute z-30 bottom-[30px] left-[25px]">
+              <div>
+                <TimSvg id={songId} />
               </div>
             </div>
           )}

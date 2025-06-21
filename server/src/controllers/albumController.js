@@ -48,7 +48,7 @@ const getAlbumDetail = asyncHandler(async (req, res) => {
   const album = await Album.findById(id)
     .populate({
       path: "songs",
-      select: "title artist url_audio url_img releaseDate views likes",
+      select: "title artist lyrics url_audio url_img releaseDate views likes",
     })
     .populate({
       path: "createdBy",
@@ -84,9 +84,56 @@ const getAlbumsByUser = asyncHandler(async (req, res) => {
   });
 });
 
+// Xoá bài hát khỏi album
+const deleteSongFromAlbum = asyncHandler(async (req, res) => {
+  const { albumId, songId } = req.body;
+
+  const album = await Album.findById(albumId);
+  if (!album) return res.status(404).json({ error: "Album không tồn tại." });
+
+  // Kiểm tra bài hát có trong album hay không
+  const index = album.songs.indexOf(songId);
+  if (index === -1)
+    return res
+      .status(400)
+      .json({ error: "Bài hát không tồn tại trong album." });
+
+  album.songs.splice(index, 1); // xoá khỏi mảng
+  await album.save();
+
+  res.status(200).json({
+    success: true,
+    message: "Đã xoá bài hát khỏi album.",
+    album,
+  });
+});
+
+// Xoá 1 album cụ thể theo ID
+const deleteAlbum = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const userId = req.user.id;
+
+  const album = await Album.findById(id);
+  if (!album) return res.status(404).json({ error: "Album không tồn tại." });
+
+  // Chỉ người tạo mới có quyền xoá
+  if (album.createdBy.toString() !== userId) {
+    return res.status(403).json({ error: "Bạn không có quyền xoá album này." });
+  }
+
+  await Album.findByIdAndDelete(id);
+
+  res.status(200).json({
+    success: true,
+    message: "Đã xoá album thành công.",
+  });
+});
+
 module.exports = {
   getAlbumDetail,
   createAlbum,
   addSongToAlbum,
   getAlbumsByUser,
+  deleteSongFromAlbum,
+  deleteAlbum,
 };
